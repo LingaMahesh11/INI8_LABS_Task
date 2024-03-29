@@ -46,12 +46,12 @@ public class RegistrationCRUD {
                             break;
                         }
                         case 3: {
-                        	updateSingleColumnInRegistration(con, scan);
+                            updateSingleColumnInRegistration(con, scan);
                             b = true;
                             break;
                         }
                         case 4: {
-                        	updateMultipleColumnInRegistration(con, scan);
+                            updateMultipleColumnInRegistration(con, scan);
                             b = true;
                             break;
                         }
@@ -74,49 +74,57 @@ public class RegistrationCRUD {
                     System.out.println("Enter a valid option");
                 }
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (ClassNotFoundException e) {
+            System.out.println("Error: JDBC Driver not found.");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Error: Unable to establish connection to the database.");
             e.printStackTrace();
         } finally {
             if (con != null) {
                 try {
                     con.close();
                 } catch (SQLException e) {
+                    System.out.println("Error: Unable to close database connection.");
                     e.printStackTrace();
                 }
             }
         }
     }
-    
-    
-    //Method to insert the data into the Registration table
+
+    // Method to insert the data into the Registration table
     private static void insertRegistration(Connection con, Scanner scan) {
         try {
             PreparedStatement pstmt = con.prepareStatement(INSERT_REGISTRATION);
             System.out.println("Enter Name:");
             pstmt.setString(1, scan.next());
-            
+
             System.out.println("Enter Email:");
             pstmt.setString(2, scan.next());
-            
+
             System.out.println("Enter Date of Birth (YYYY-MM-DD):");
             pstmt.setString(3, scan.next());
-            
+
             System.out.println("Enter Phone Number:");
             pstmt.setString(4, scan.next());
             scan.nextLine();
-            
+
             System.out.println("Enter Address:");
             pstmt.setString(5, scan.nextLine());
-            
-            pstmt.executeUpdate();
-            System.out.println("Registration inserted successfully");
+
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Registration inserted successfully");
+            } else {
+                System.out.println("Error: Failed to insert registration. Please try again.");
+            }
         } catch (SQLException e) {
+            System.out.println("Error: Failed to insert registration. Please check your input and try again.");
             e.printStackTrace();
         }
     }
 
-    
-    //Method to read the data from the Registration table
+    // Method to read the data from the Registration table
     private static void readRegistrations(Connection con) {
         try {
             PreparedStatement pstmt = con.prepareStatement(READ_REGISTRATIONS);
@@ -127,18 +135,18 @@ public class RegistrationCRUD {
                         ", Phone_Number = " + rs.getString("Phone_Number") + ", Address = " + rs.getString("Address"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error: Failed to read registrations.");
+            
         }
     }
 
-    
-    //Method to update single column in the Registration table
+    // Method to update single column in the Registration table
     private static void updateSingleColumnInRegistration(Connection con, Scanner scan) {
         try {
             System.out.println("Enter the ID of the registration to update:");
             int id = scan.nextInt();
             scan.nextLine();
-            
+
             System.out.println("Select the field to update:");
             System.out.println("1 - Name");
             System.out.println("2 - Email");
@@ -147,7 +155,7 @@ public class RegistrationCRUD {
             System.out.println("5 - Address");
             int option = scan.nextInt();
             scan.nextLine();
-            
+
             PreparedStatement pstmt = null;
             switch (option) {
                 case 1:
@@ -179,17 +187,20 @@ public class RegistrationCRUD {
                     System.out.println("Invalid option.");
                     return;
             }
-            
+
             pstmt.setInt(2, id);
-            pstmt.executeUpdate();
-            System.out.println("Registration updated successfully");
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Registration updated successfully");
+            } else {
+                System.out.println("Error: Failed to update registration. Please check your input and try again.");
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error: Failed to update registration. Please check your input and try again.");
         }
     }
 
-    
-  //Method to update multiple columns in the Registration table
+    // Method to update multiple columns in the Registration table
     private static void updateMultipleColumnInRegistration(Connection con, Scanner scan) {
         try {
             System.out.println("Enter the ID of the registration to update:");
@@ -197,39 +208,48 @@ public class RegistrationCRUD {
             PreparedStatement pstmt = con.prepareStatement(UPDATE_REGISTRATION);
             System.out.println("Enter Name:");
             pstmt.setString(1, scan.next());
-            
+
             System.out.println("Enter Email:");
             pstmt.setString(2, scan.next());
-            
+
             System.out.println("Enter Date of Birth (YYYY-MM-DD):");
             pstmt.setString(3, scan.next());
-            
+
             System.out.println("Enter Phone Number:");
             pstmt.setString(4, scan.next());
             scan.nextLine();
-            
+
             System.out.println("Enter Address:");
             pstmt.setString(5, scan.nextLine());
-            
+
             pstmt.setInt(6, id);
-            pstmt.executeUpdate();
-            System.out.println("Registration updated successfully");
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Registration updated successfully");
+            } else {
+                System.out.println("Error: Failed to update registration. Please check your input and try again.");
+            }
         } catch (SQLException e) {
+            System.out.println("Error: Failed to update registration. Please check your input and try again.");
             e.printStackTrace();
         }
     }
-    
-    
-    //Method to delete a row from the Registration table
+
+    // Method to delete a row from the Registration table
     private static void deleteRegistration(Connection con, Scanner scan) {
         try {
             System.out.println("Enter the ID of the registration to delete:");
             int id = scan.nextInt();
             PreparedStatement pstmt = con.prepareStatement(DELETE_REGISTRATION);
             pstmt.setInt(1, id);
-            pstmt.executeUpdate();
-            System.out.println("Row deleted successfully");
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Row deleted successfully");
+            } else {
+                System.out.println("Error: Failed to delete registration. Please check the ID and try again.");
+            }
         } catch (SQLException e) {
+            System.out.println("Error: Failed to delete registration. Please check the ID and try again.");
             e.printStackTrace();
         }
     }

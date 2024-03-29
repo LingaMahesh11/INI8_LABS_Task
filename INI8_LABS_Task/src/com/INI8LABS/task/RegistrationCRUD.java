@@ -4,9 +4,9 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class RegistrationCRUD {
-    private static final String URL = "jdbc:mysql://localhost:3306/ini8_labs_task";
-    private static final String USER_NAME = "root";
-    private static final String PASSWORD = "Mahesh11@#";
+    private static final String URL = "jdbc:mysql://localhost:3306/Database_name";
+    private static final String USER_NAME = "username";
+    private static final String PASSWORD = "password";
 
     private static final String INSERT_REGISTRATION = "INSERT INTO Registration (Name, Email, DateOfBirth, Phone_Number, Address) VALUES (?, ?, ?, ?, ?)";
     private static final String READ_REGISTRATIONS = "SELECT * FROM Registration";

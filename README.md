@@ -14,7 +14,7 @@ This project implements a simple registration system in Java using JDBC (Java da
 1. **Clone the Repository:**
    - Clone this repository to your local machine using Git:
      ```
-     git clone https://github.com/your-username/registration-system.git
+     git clone https://github.com/LingaMahesh11/INI8_LABS_Task.git
      ```
 
 2. **Download MySQL Connector/J**
